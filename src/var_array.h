@@ -8,18 +8,71 @@ namespace var {
         template <typename ...Ts>
         ArrayImpl(T arg, Ts... args) : data(arg), ArrayImpl<T, m, n - 1>(args...) {}
 
+        ArrayImpl(T arg) : data(arg), ArrayImpl<T, m, n-1>(arg) {}
+
+        ArrayImpl(const ArrayImpl<T, m, n>& other) : data(other.data), ArrayImpl<T, m, n - 1>(other) {}
+        ArrayImpl(const ArrayImpl<T, m, n>&& other) : data(other.data), ArrayImpl<T, m, n - 1>(other) {}
+
+        ArrayImpl& operator=(const ArrayImpl<T, m, n>& other) {
+            data = other.data;
+            ArrayImpl<T, m, n - 1>::operator=(other);
+
+            return *this;
+        }
+
+        ArrayImpl& operator=(const ArrayImpl<T, m, n>&& other) {
+            data = other.data;
+            ArrayImpl<T, m, n - 1>::operator=(other);
+
+            return *this;
+        }
+
+        ~ArrayImpl() {}
+
         T data;
     };
 
     template <typename T, int m>
     struct ArrayImpl<T, m, 0> {
-        ArrayImpl() {}
+        ArrayImpl() {} 
+        ArrayImpl(T arg) {}
+
+        ArrayImpl(const ArrayImpl<T, m, 0>& other) {}
+        ArrayImpl(const ArrayImpl<T, m, 0>&& other) {}
+
+        ArrayImpl& operator=(const ArrayImpl<T, m, 0>& other) {
+            return *this;
+        }
+        ArrayImpl& operator=(const ArrayImpl<T, m, 0>&& other) {
+            return *this;
+        }
+        ~ArrayImpl() {}
     };
 
     template <typename T, int m>
     struct Array {
         template <typename ...Ts>
         Array(Ts... args) : impl(args...) {}
+
+        //template <typename std::enable_if<std::is_arithmetic<T>::value>::type>
+        //Array() : impl(static_cast<T>(0)) {} 
+
+        Array(const Array<T, m>& other) : impl(other.impl) {}
+        Array(const Array<T, m>&& other) : impl(other.impl) {}
+
+        Array& operator=(const Array<T, m>& other) {
+            impl = other.impl;
+
+            return *this;
+        }
+
+        Array& operator=(const Array<T, m>&& other) {
+            impl = other.impl;
+
+            return *this;
+        }
+
+        ~Array() {}
 
         ArrayImpl<T, m, m> impl;
     };

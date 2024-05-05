@@ -34,5 +34,43 @@ int main(int argc, char** argv) {
     // The following is a compile error
     // std::cout << "Three[3]: " << var::get<3>(three) << std::endl;
 
+    var::Array<double, 3> three_1(1.0);
+
+    std::cout << "Three_1[0]: " << var::get<0>(three_1) << std::endl;
+    std::cout << "Three_1[1]: " << var::get<1>(three_1) << std::endl;
+    std::cout << "Three_1[2]: " << var::get<2>(three_1) << std::endl;
+
+    // The following is a compile error
+    // std::cout << "Three_1[3]: " << var::get<3>(three_1) << std::endl;
+
+    var::Array<double, 3> three_copy(three);
+
+    std::cout << "Three_copy[0]: " << var::get<0>(three_copy) << std::endl;
+    std::cout << "Three_copy[1]: " << var::get<1>(three_copy) << std::endl;
+    std::cout << "Three_copy[2]: " << var::get<2>(three_copy) << std::endl;
+
+    // The following is a compile error
+    // std::cout << "Three_copy[3]: " << var::get<3>(three_copy) << std::endl;
+
+    three_1 = three_copy;
+
+    std::cout << "Three_1[0]: " << var::get<0>(three_1) << std::endl;
+    std::cout << "Three_1[1]: " << var::get<1>(three_1) << std::endl;
+    std::cout << "Three_1[2]: " << var::get<2>(three_1) << std::endl;
+
+    // The following is a compile error
+    // std::cout << "Three_1[3]: " << var::get<3>(three_1) << std::endl;
+
+    /*
+    var::Array<double, 3> three_arithmetic;
+
+    std::cout << "Three_arithmetic[0]: " << var::get<0>(three_arithmetic) << std::endl;
+    std::cout << "Three_arithmetic[1]: " << var::get<1>(three_arithmetic) << std::endl;
+    std::cout << "Three_arithmetic[2]: " << var::get<2>(three_arithmetic) << std::endl;
+    */
+
+    // The following is a compile error
+    // std::cout << "Three_arithmetic[3]: " << var::get<3>(three_arithmetic) << std::endl;
+
     return 0;
 }
