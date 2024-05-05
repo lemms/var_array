@@ -2,6 +2,9 @@
 // Copyright Laurence Emms 2024
 
 
+#include <type_traits>
+
+
 namespace var {
     template <typename T, int m, int n>
     struct ArrayImpl : public ArrayImpl<T, m, n - 1> {
@@ -49,24 +52,48 @@ namespace var {
         ~ArrayImpl() {}
     };
 
-    template <typename T, int m>
+    template <typename T, int m, typename Enable = void>
     struct Array {
         template <typename ...Ts>
         Array(Ts... args) : impl(args...) {}
 
-        //template <typename std::enable_if<std::is_arithmetic<T>::value>::type>
-        //Array() : impl(static_cast<T>(0)) {} 
+        Array(const Array& other) : impl(other.impl) {}
+        Array(const Array&& other) : impl(other.impl) {}
 
-        Array(const Array<T, m>& other) : impl(other.impl) {}
-        Array(const Array<T, m>&& other) : impl(other.impl) {}
-
-        Array& operator=(const Array<T, m>& other) {
+        Array& operator=(const Array& other) {
             impl = other.impl;
 
             return *this;
         }
 
-        Array& operator=(const Array<T, m>&& other) {
+        Array& operator=(const Array&& other) {
+            impl = other.impl;
+
+            return *this;
+        }
+
+        ~Array() {}
+
+        ArrayImpl<T, m, m> impl;
+    };
+
+    template <typename T, int m>
+    struct Array<T, m, typename std::enable_if<std::is_arithmetic<T>::value>::type> {
+        template <typename ...Ts>
+        Array(Ts... args) : impl(args...) {}
+
+        Array() : impl(static_cast<T>(0)) {}
+
+        Array(const Array& other) : impl(other.impl) {}
+        Array(const Array&& other) : impl(other.impl) {}
+
+        Array& operator=(const Array& other) {
+            impl = other.impl;
+
+            return *this;
+        }
+
+        Array& operator=(const Array&& other) {
             impl = other.impl;
 
             return *this;

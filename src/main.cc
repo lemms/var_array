@@ -3,6 +3,7 @@
 
 
 #include <iostream>
+#include <string>
 
 #include "var_array.h"
 
@@ -61,16 +62,23 @@ int main(int argc, char** argv) {
     // The following is a compile error
     // std::cout << "Three_1[3]: " << var::get<3>(three_1) << std::endl;
 
-    /*
     var::Array<double, 3> three_arithmetic;
 
     std::cout << "Three_arithmetic[0]: " << var::get<0>(three_arithmetic) << std::endl;
     std::cout << "Three_arithmetic[1]: " << var::get<1>(three_arithmetic) << std::endl;
     std::cout << "Three_arithmetic[2]: " << var::get<2>(three_arithmetic) << std::endl;
-    */
 
     // The following is a compile error
     // std::cout << "Three_arithmetic[3]: " << var::get<3>(three_arithmetic) << std::endl;
+
+    var::Array<std::string, 3> three_non_arithmetic{"Hello", ",", "world!"};
+
+    std::cout << "Three_non_arithmetic[0]: " << var::get<0>(three_non_arithmetic) << std::endl;
+    std::cout << "Three_non_arithmetic[1]: " << var::get<1>(three_non_arithmetic) << std::endl;
+    std::cout << "Three_non_arithmetic[2]: " << var::get<2>(three_non_arithmetic) << std::endl;
+
+    // The following is a compile error because std::string is not an arithmetic type
+    //var::Array<std::string, 3> three_non_arithmetic;
 
     return 0;
 }
