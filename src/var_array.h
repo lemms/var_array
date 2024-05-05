@@ -3,26 +3,44 @@
 
 
 namespace var {
-    template <typename T, int n>
-    struct Array : public Array<T, n - 1> {
+    template <typename T, int m, int n>
+    struct ArrayImpl : public ArrayImpl<T, m, n - 1> {
         template <typename ...Ts>
-        Array(T arg, Ts... args) : data(arg), Array<T, n - 1>(args...) {}
+        ArrayImpl(T arg, Ts... args) : data(arg), ArrayImpl<T, m, n - 1>(args...) {}
 
         T data;
     };
 
-    template <typename T>
-    struct Array<T, 0> {
-        Array() {}
+    template <typename T, int m>
+    struct ArrayImpl<T, m, 0> {
+        ArrayImpl() {}
     };
 
-    template <int n, typename T>
-    T& get(Array<T, n + 1>& array) {
+    template <typename T, int m>
+    struct Array {
+        template <typename ...Ts>
+        Array(Ts... args) : impl(args...) {}
+
+        ArrayImpl<T, m, m> impl;
+    };
+
+    template <int n, typename T, int m>
+    T& get(ArrayImpl<T, m, m - n>& array) {
         return array.data;
     }
 
-    template <int n, typename T>
-    const T& get(const Array<T, n + 1>& array) {
+    template <int n, typename T, int m>
+    const T& get(const ArrayImpl<T, m, m - n>& array) {
         return array.data;
+    }
+
+    template <int n, typename T, int m>
+    T& get(Array<T, m>& array) {
+        return get<n, T, m>(array.impl);
+    }
+
+    template <int n, typename T, int m>
+    const T& get(const Array<T, m>& array) {
+        return get<n, T, m>(array.impl);
     }
 }
