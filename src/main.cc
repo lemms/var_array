@@ -53,14 +53,14 @@ int main(int argc, char** argv) {
     // The following is a compile error
     // std::cout << "Three_copy[3]: " << var::get<3>(three_copy) << std::endl;
 
-    three_1 = three_copy;
+    var::Array<double, 3> three_assignment = three_copy;
 
-    std::cout << "Three_1[0]: " << var::get<0>(three_1) << std::endl;
-    std::cout << "Three_1[1]: " << var::get<1>(three_1) << std::endl;
-    std::cout << "Three_1[2]: " << var::get<2>(three_1) << std::endl;
+    std::cout << "Three_assignment[0]: " << var::get<0>(three_assignment) << std::endl;
+    std::cout << "Three_assignment[1]: " << var::get<1>(three_assignment) << std::endl;
+    std::cout << "Three_assignment[2]: " << var::get<2>(three_assignment) << std::endl;
 
     // The following is a compile error
-    // std::cout << "Three_1[3]: " << var::get<3>(three_1) << std::endl;
+    // std::cout << "Three_assignment[3]: " << var::get<3>(three_assignment) << std::endl;
 
     var::Array<double, 3> three_arithmetic;
 
@@ -79,6 +79,15 @@ int main(int argc, char** argv) {
 
     // The following is a compile error because std::string is not an arithmetic type
     //var::Array<std::string, 3> three_non_arithmetic;
+
+    var::Array<double, 3> three_sum = var::map(three, three_1, 0.0, [](double lhs, double rhs) -> double { return lhs + rhs; });
+
+    std::cout << "Three_sum[0]: " << var::get<0>(three_sum) << std::endl;
+    std::cout << "Three_sum[1]: " << var::get<1>(three_sum) << std::endl;
+    std::cout << "Three_sum[2]: " << var::get<2>(three_sum) << std::endl;
+
+    // The following is a compile error
+    // std::cout << "Three_sum[3]: " << var::get<3>(three_sum) << std::endl;
 
     return 0;
 }

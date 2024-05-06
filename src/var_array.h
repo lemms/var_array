@@ -123,4 +123,33 @@ namespace var {
     const T& get(const Array<T, m>& array) {
         return get<n, T, m>(array.impl);
     }
+
+    template <typename T, int m, int n, typename F>
+    void map_impl(ArrayImpl<T, m, n>& result, const ArrayImpl<T, m, n>& lhs, const ArrayImpl<T, m, n>& rhs, T val, F op) {
+        result.data = op(lhs.data, rhs.data);
+
+        map_impl<T, m, n - 1, F>(result, lhs, rhs, val, op);
+    }
+
+    template <typename T, int m, int n, typename F>
+    void map_impl(ArrayImpl<T, m, 0>& result, const ArrayImpl<T, m, 0>& lhs, const ArrayImpl<T, m, 0>& rhs, T val, F op) {
+    }
+
+    template <typename T, int m, int n, typename F>
+    ArrayImpl<T, m, n> map(const ArrayImpl<T, m, n>& lhs, const ArrayImpl<T, m, n>& rhs, T val, F op) {
+        ArrayImpl<T, m, n> result(val);
+
+        map_impl<T, m, n, F>(result, lhs, rhs, val, op);
+
+        return result;
+    }
+
+    template <typename T, int m, typename F>
+    Array<T, m> map(const Array<T, m>& lhs, const Array<T, m>& rhs, T val, F op) {
+        Array<T, m> result(val);
+
+        result.impl = map<T, m, m, F>(lhs.impl, rhs.impl, val, op);
+
+        return result;
+    }
 }
