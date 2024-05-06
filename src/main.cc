@@ -121,5 +121,16 @@ int main(int argc, char** argv) {
     // The following is a compile error
     // std::cout << "Concat[5]: " << var::get<5>(concat) << std::endl;
 
+    var::Array<std::string, 5> three_delim = intercalate(three_non_arithmetic, std::string(":"), std::string());
+
+    std::cout << "Three_delim[0]: " << var::get<0>(three_delim) << std::endl;
+    std::cout << "Three_delim[1]: " << var::get<1>(three_delim) << std::endl;
+    std::cout << "Three_delim[2]: " << var::get<2>(three_delim) << std::endl;
+    std::cout << "Three_delim[3]: " << var::get<3>(three_delim) << std::endl;
+    std::cout << "Three_delim[4]: " << var::get<4>(three_delim) << std::endl;
+
+    // The following is a compile error
+    // std::cout << "Three_delim[5]: " << var::get<5>(three_delim) << std::endl;
+
     return 0;
 }

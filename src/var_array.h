@@ -219,15 +219,38 @@ namespace var {
         return result;
     }
 
-    /*
-    template <typename T, int m, int n>
-    ArrayImpl<T, m, n> intercalate(const ArrayImpl<T, m, n>& array, T delim) {
-        return array.data, foldl<T, m, n - 1, F>(array, acc, op));
+    template <typename T, int m, int n, int o>
+    void intercalate_impl(ArrayImpl<T, m * 2 - 1, n>& result, const ArrayImpl<T, m, o>& array, T delim);
+
+    template <typename T, int m, int n, int o>
+    void intercalate_impl(ArrayImpl<T, m * 2 - 1, 0>& result, const ArrayImpl<T, m, 0>& array, T delim);
+
+    template <typename T, int m, int n, int o>
+    void intercalate_delim(ArrayImpl<T, m * 2 - 1, n>& result, const ArrayImpl<T, m, o>& array, T delim) {
+        result.data = delim;
+        intercalate_impl<T, m, n - 1, o>(result, array, delim);
+    }
+
+    template <typename T, int m, int n, int o>
+    void intercalate_delim(ArrayImpl<T, m * 2 - 1, 0>& result, const ArrayImpl<T, m, 0>& array, T delim) {
+    }
+
+    template <typename T, int m, int n, int o>
+    void intercalate_impl(ArrayImpl<T, m * 2 - 1, n>& result, const ArrayImpl<T, m, o>& array, T delim) {
+        result.data = array.data;
+        intercalate_delim<T, m, n - 1, o - 1>(result, array, delim);
+    }
+
+    template <typename T, int m, int n, int o>
+    void intercalate_impl(ArrayImpl<T, m * 2 - 1, 0>& result, const ArrayImpl<T, m, 0>& array, T delim) {
     }
 
     template <typename T, int m>
-    Array<T, m * 2 - 1> intercalate(const Array<T, m>& array, T delim) {
-        Array<T, m * 2 - 1> result;
+    Array<T, m * 2 - 1> intercalate(const Array<T, m>& array, T delim, T val) {
+        Array<T, m * 2 - 1> result(val);
+
+        intercalate_impl<T, m, m * 2 - 1, m>(result.impl, array.impl, delim);
+
+        return result;
     }
-    */
 }
