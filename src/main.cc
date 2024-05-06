@@ -132,5 +132,7 @@ int main(int argc, char** argv) {
     // The following is a compile error
     // std::cout << "Three_delim[5]: " << var::get<5>(three_delim) << std::endl;
 
+    std::cout << "Three_delim size: " << var::length(three_delim) << std::endl;
+
     return 0;
 }
