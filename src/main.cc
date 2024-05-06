@@ -89,5 +89,13 @@ int main(int argc, char** argv) {
     // The following is a compile error
     // std::cout << "Three_sum[3]: " << var::get<3>(three_sum) << std::endl;
 
+    double three_sum_foldl = var::foldl(three_sum, 0.0, [](double lhs, double rhs) -> double { return lhs + rhs; });
+
+    std::cout << "Three_sum foldl: " << three_sum_foldl << std::endl;
+
+    double three_sum_foldr = var::foldr(three_sum, 0.0, [](double lhs, double rhs) -> double { return lhs + rhs; });
+
+    std::cout << "Three_sum foldr: " << three_sum_foldr << std::endl;
+
     return 0;
 }

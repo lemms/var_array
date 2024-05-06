@@ -152,4 +152,35 @@ namespace var {
 
         return result;
     }
+
+    template <typename T, int m, int n, typename F>
+    T foldl(const ArrayImpl<T, m, n>& array, T acc, F op) {
+        T z = op(acc, array.data);
+        return foldl<T, m, n - 1, F>(array, z, op);
+    }
+
+    template <typename T, int m, int n, typename F>
+    T foldl(const ArrayImpl<T, m, 0>& array, T acc, F op) {
+        return acc;
+    }
+
+    template <typename T, int m, typename F>
+    T foldl(const Array<T, m>& array, T acc, F op) {
+        return foldl<T, m, m, F>(array.impl, acc, op);
+    }
+
+    template <typename T, int m, int n, typename F>
+    T foldr(const ArrayImpl<T, m, n>& array, T acc, F op) {
+        return op(array.data, foldl<T, m, n - 1, F>(array, acc, op));
+    }
+
+    template <typename T, int m, int n, typename F>
+    T foldr(const ArrayImpl<T, m, 0>& array, T acc, F op) {
+        return acc;
+    }
+
+    template <typename T, int m, typename F>
+    T foldr(const Array<T, m>& array, T acc, F op) {
+        return foldr<T, m, m, F>(array.impl, acc, op);
+    }
 }
