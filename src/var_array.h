@@ -124,6 +124,11 @@ namespace var {
         return get<n, T, m>(array.impl);
     }
 
+    template <typename T, int m>
+    size_t length(const Array<T, m>& array) {
+        return m;
+    }
+
     template <typename T, int m, int n, typename F>
     void map_impl(ArrayImpl<T, m, n>& result, const ArrayImpl<T, m, n>& lhs, const ArrayImpl<T, m, n>& rhs, T val, F op) {
         result.data = op(lhs.data, rhs.data);
@@ -183,4 +188,46 @@ namespace var {
     T foldr(const Array<T, m>& array, T acc, F op) {
         return foldr<T, m, m, F>(array.impl, acc, op);
     }
+
+    template <typename T, int m, int n, int p>
+    void concat_impl_rhs(ArrayImpl<T, m + n, p>& result, const ArrayImpl<T, m, 0>& lhs, const ArrayImpl<T, n, p>& rhs) {
+        result.data = rhs.data;
+        concat_impl_rhs<T, m, n, p - 1>(result, lhs, rhs);
+    }
+
+    template <typename T, int m, int n, int p>
+    void concat_impl_rhs(ArrayImpl<T, m + n, 0>& result, const ArrayImpl<T, m, 0>& lhs, const ArrayImpl<T, n, 0>& rhs) {
+    }
+
+    template <typename T, int m, int n, int o>
+    void concat_impl_lhs(ArrayImpl<T, m + n, o + n>& result, const ArrayImpl<T, m, o>& lhs, const ArrayImpl<T, n, n>& rhs) {
+        result.data = lhs.data;
+        concat_impl_lhs<T, m, n, o - 1>(result, lhs, rhs);
+    }
+
+    template <typename T, int m, int n, int o>
+    void concat_impl_lhs(ArrayImpl<T, m + n, n>& result, const ArrayImpl<T, m, 0>& lhs, const ArrayImpl<T, n, n>& rhs) {
+        concat_impl_rhs<T, m, n, n>(result, lhs, rhs);
+    }
+
+    template <typename T, int m, int n>
+    Array<T, m + n> concat(const Array<T, m>& lhs, const Array<T, n>& rhs, T val) {
+        Array<T, m + n> result(val);
+
+        concat_impl_lhs<T, m, n, m>(result.impl, lhs.impl, rhs.impl);
+
+        return result;
+    }
+
+    /*
+    template <typename T, int m, int n>
+    ArrayImpl<T, m, n> intercalate(const ArrayImpl<T, m, n>& array, T delim) {
+        return array.data, foldl<T, m, n - 1, F>(array, acc, op));
+    }
+
+    template <typename T, int m>
+    Array<T, m * 2 - 1> intercalate(const Array<T, m>& array, T delim) {
+        Array<T, m * 2 - 1> result;
+    }
+    */
 }

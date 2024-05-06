@@ -97,7 +97,7 @@ int main(int argc, char** argv) {
 
     std::cout << "Three_sum foldr: " << three_sum_foldr << std::endl;
 
-    std::string three_concat = var::foldl(three_non_arithmetic, std::string(), [](const std::string& lhs, const std::string& rhs) -> std::string {
+    std::string three_string_fold = var::foldl(three_non_arithmetic, std::string(), [](const std::string& lhs, const std::string& rhs) -> std::string {
             std::string ss(lhs.size() + rhs.size(), ' ');
             for (uint32_t i = 0; i < lhs.size(); ++i) {
                 ss[i] = lhs[i];
@@ -108,7 +108,18 @@ int main(int argc, char** argv) {
             return ss;
             });
 
-    std::cout << "Three concat: " << three_concat << std::endl;
+    std::cout << "Three string fold: " << three_string_fold << std::endl;
+
+    var::Array<double, 5> concat = var::concat(three, two, 0.0);
+
+    std::cout << "Concat[0]: " << var::get<0>(concat) << std::endl;
+    std::cout << "Concat[1]: " << var::get<1>(concat) << std::endl;
+    std::cout << "Concat[2]: " << var::get<2>(concat) << std::endl;
+    std::cout << "Concat[3]: " << var::get<3>(concat) << std::endl;
+    std::cout << "Concat[4]: " << var::get<4>(concat) << std::endl;
+
+    // The following is a compile error
+    // std::cout << "Concat[5]: " << var::get<5>(concat) << std::endl;
 
     return 0;
 }
