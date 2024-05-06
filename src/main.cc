@@ -3,6 +3,7 @@
 
 
 #include <iostream>
+#include <sstream>
 #include <string>
 
 #include "var_array.h"
@@ -71,7 +72,7 @@ int main(int argc, char** argv) {
     // The following is a compile error
     // std::cout << "Three_arithmetic[3]: " << var::get<3>(three_arithmetic) << std::endl;
 
-    var::Array<std::string, 3> three_non_arithmetic{"Hello", ",", "world!"};
+    var::Array<std::string, 3> three_non_arithmetic{"Hello", ",", " world!"};
 
     std::cout << "Three_non_arithmetic[0]: " << var::get<0>(three_non_arithmetic) << std::endl;
     std::cout << "Three_non_arithmetic[1]: " << var::get<1>(three_non_arithmetic) << std::endl;
@@ -96,6 +97,14 @@ int main(int argc, char** argv) {
     double three_sum_foldr = var::foldr(three_sum, 0.0, [](double lhs, double rhs) -> double { return lhs + rhs; });
 
     std::cout << "Three_sum foldr: " << three_sum_foldr << std::endl;
+
+    std::string three_concat = var::foldl(three_non_arithmetic, std::string(), [](const std::string& lhs, const std::string& rhs) -> std::string {
+            std::stringstream ss;
+            ss << lhs << rhs;
+            return ss.str();
+            });
+
+    std::cout << "Three concat: " << three_concat << std::endl;
 
     return 0;
 }
