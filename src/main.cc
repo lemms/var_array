@@ -3,7 +3,6 @@
 
 
 #include <iostream>
-#include <sstream>
 #include <string>
 
 #include "var_array.h"
@@ -99,9 +98,14 @@ int main(int argc, char** argv) {
     std::cout << "Three_sum foldr: " << three_sum_foldr << std::endl;
 
     std::string three_concat = var::foldl(three_non_arithmetic, std::string(), [](const std::string& lhs, const std::string& rhs) -> std::string {
-            std::stringstream ss;
-            ss << lhs << rhs;
-            return ss.str();
+            std::string ss(lhs.size() + rhs.size(), ' ');
+            for (uint32_t i = 0; i < lhs.size(); ++i) {
+                ss[i] = lhs[i];
+            }
+            for (uint32_t i = 0; i < rhs.size(); ++i) {
+                ss[lhs.size() + i] = rhs[i];
+            }
+            return ss;
             });
 
     std::cout << "Three concat: " << three_concat << std::endl;
